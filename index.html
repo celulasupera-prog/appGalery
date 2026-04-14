@@ -300,7 +300,26 @@
 
   <div class="grid">
 
-    <!-- App 1 -->
+   <!-- App 5 — Controles DP -->
+    <div class="card" onclick="document.getElementById('modalControles').style.display='flex'" style="cursor:pointer;">
+      <div class="card-preview" style="background: #0d0814;">
+        <div class="card-preview-glow" style="background: #c77dff;"></div>
+        <div class="card-preview-bg" style="background: radial-gradient(circle at 50% 50%, #c77dff22, transparent 70%);"></div>
+        <span class="card-preview-icon" style="color: #c77dff;">🗃️</span>
+      </div>
+      <div class="card-body">
+        <div class="card-top">
+          <div class="card-name">Controles DP</div>
+          <span class="card-arrow" style="color: #c77dff;">↗</span>
+        </div>
+        <p class="card-desc">Acesse os controles de Folha, Afastamentos, Consignado e Rescisões por empresa.</p>
+        <div class="card-footer">
+          <span class="card-tag" style="color: #c77dff; border-color: rgba(199,125,255,0.25); background: rgba(199,125,255,0.05);">Multi-empresa</span>
+          <span class="card-url">—</span>
+        </div>
+      </div>
+    </div> 
+   <!-- App 1 -->
     <a class="card" href="https://validacao-5ycqiubsvv2powyhssapphh.streamlit.app/" target="_blank" rel="noopener">
       <div class="card-preview" style="background: #080f14;">
         <div class="card-preview-glow" style="background: #00e5ff;"></div>
@@ -389,5 +408,80 @@
   </div>
 </footer>
 
+<!-- Modal Controles -->
+<div id="modalControles" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; backdrop-filter:blur(6px);">
+  <div style="background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:2rem; width:90%; max-width:420px; position:relative;">
+    
+    <button onclick="closeModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:#888; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+
+    <p style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#c77dff; margin-bottom:0.5rem;">Controles DP</p>
+    <h2 style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:#f0f0f0; margin-bottom:1.75rem;">Selecione o grupo</h2>
+
+    <!-- Step 1: Grupos -->
+    <div id="stepGrupo">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <button class="modal-btn" onclick="selectGrupo('supera')">🏢 Supera</button>
+        <button class="modal-btn" onclick="selectGrupo('novaera')">🏢 Nova Era</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Controles -->
+    <div id="stepControle" style="display:none;">
+      <button onclick="backToGrupo()" style="background:none; border:none; color:#888; font-size:13px; cursor:pointer; margin-bottom:1.25rem; display:flex; align-items:center; gap:6px;">← Voltar</button>
+      <p id="labelGrupo" style="font-size:13px; color:#888; margin-bottom:1rem;"></p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <a id="linkFolha"        class="modal-btn" target="_blank">📄 Folha</a>
+        <a id="linkAfastamentos" class="modal-btn" target="_blank">🏥 Afastamentos</a>
+        <a id="linkConsignado"   class="modal-btn" target="_blank">💳 Consignado</a>
+        <a id="linkRescisoes"    class="modal-btn" target="_blank">📋 Rescisões</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.modal-btn {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  padding:14px 10px; background:rgba(199,125,255,0.06);
+  border:1px solid rgba(199,125,255,0.2); border-radius:12px;
+  color:#f0f0f0; font-family:'Syne',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; text-decoration:none;
+  transition:background 0.2s, border-color 0.2s;
+}
+.modal-btn:hover { background:rgba(199,125,255,0.15); border-color:rgba(199,125,255,0.5); }
+</style>
+
+<script>
+const links = {
+  supera:  { folha:'#', afastamentos:'#', consignado:'#', rescisoes:'#' },
+  novaera: { folha:'#', afastamentos:'#', consignado:'#', rescisoes:'#' },
+};
+
+function selectGrupo(grupo) {
+  document.getElementById('stepGrupo').style.display = 'none';
+  document.getElementById('stepControle').style.display = 'block';
+  document.getElementById('labelGrupo').textContent = 'Grupo: ' + (grupo === 'supera' ? 'Supera' : 'Nova Era');
+  document.getElementById('linkFolha').href        = links[grupo].folha;
+  document.getElementById('linkAfastamentos').href = links[grupo].afastamentos;
+  document.getElementById('linkConsignado').href   = links[grupo].consignado;
+  document.getElementById('linkRescisoes').href    = links[grupo].rescisoes;
+}
+
+function backToGrupo() {
+  document.getElementById('stepControle').style.display = 'none';
+  document.getElementById('stepGrupo').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('modalControles').style.display = 'none';
+  backToGrupo();
+}
+
+document.getElementById('modalControles').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+</script>
+ 
 </body>
 </html>
