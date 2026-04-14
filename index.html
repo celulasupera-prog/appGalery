@@ -429,12 +429,7 @@
     <div id="stepControle" style="display:none;">
       <button onclick="backToGrupo()" style="background:none; border:none; color:#888; font-size:13px; cursor:pointer; margin-bottom:1.25rem; display:flex; align-items:center; gap:6px;">← Voltar</button>
       <p id="labelGrupo" style="font-size:13px; color:#888; margin-bottom:1rem;"></p>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-        <a id="linkFolha"        class="modal-btn" target="_blank">📄 Folha</a>
-        <a id="linkAfastamentos" class="modal-btn" target="_blank">🏥 Afastamentos</a>
-        <a id="linkConsignado"   class="modal-btn" target="_blank">💳 Consignado</a>
-        <a id="linkRescisoes"    class="modal-btn" target="_blank">📋 Rescisões</a>
-      </div>
+      <div id="listaControles" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"></div>
     </div>
 
   </div>
@@ -454,20 +449,48 @@
 
 <script>
 const links = {
-  supera:  { folha:'https://docs.google.com/spreadsheets/d/1IwE0SnRyR4NAYHZsECE98613_JQDkziX/edit?gid=893516577#gid=893516577', afastamentos:'https://docs.google.com/spreadsheets/d/1IwE0SnRyR4NAYHZsECE98613_JQDkziX/edit?gid=926859138#gid=926859138', consignado:'https://docs.google.com/spreadsheets/d/1QG03zo03MyDdy5WVA09HUziUEt1JvrDb/edit?gid=481853417#gid=481853417', rescisoes:'https://docs.google.com/spreadsheets/d/1j6grFCdnd-d60Za02i5y7m4_saL6W1a1/edit?gid=1330458603#gid=1330458603' },
-  novaera: { folha:'https://docs.google.com/spreadsheets/d/1UqG2vKyh0BO31T9C10dhL_6C2oH4QzND/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true', afastamentos:'#', compensação:'https://docs.google.com/spreadsheets/d/1IIMTUuOMcJkm4dgozfGthALi-FPwxcQu/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true', rescisoes:'https://docs.google.com/spreadsheets/d/1C71Ca_-e9SObUGfxE7LhUr6qzlP1g0BO/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true', pensão: 'https://docs.google.com/spreadsheets/d/1BtLcd1lcpMYpHEQEtT92mbU873JqZJEV/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true' },
+  supera: {
+    nome: 'Supera',
+    controles: [
+      { label: 'Folha', icon: '📄', href: 'https://docs.google.com/spreadsheets/d/1IwE0SnRyR4NAYHZsECE98613_JQDkziX/edit?gid=893516577#gid=893516577' },
+      { label: 'Afastamentos', icon: '🏥', href: 'https://docs.google.com/spreadsheets/d/1IwE0SnRyR4NAYHZsECE98613_JQDkziX/edit?gid=926859138#gid=926859138' },
+      { label: 'Consignado', icon: '💳', href: 'https://docs.google.com/spreadsheets/d/1QG03zo03MyDdy5WVA09HUziUEt1JvrDb/edit?gid=481853417#gid=481853417' },
+      { label: 'Rescisões', icon: '📋', href: 'https://docs.google.com/spreadsheets/d/1j6grFCdnd-d60Za02i5y7m4_saL6W1a1/edit?gid=1330458603#gid=1330458603' }
+    ]
+  },
+  novaera: {
+    nome: 'Nova Era',
+    controles: [
+      { label: 'Folha', icon: '📄', href: 'https://docs.google.com/spreadsheets/d/1UqG2vKyh0BO31T9C10dhL_6C2oH4QzND/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true' },
+      { label: 'Compensação', icon: '⚖️', href: 'https://docs.google.com/spreadsheets/d/1IIMTUuOMcJkm4dgozfGthALi-FPwxcQu/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true' },
+      { label: 'Rescisões', icon: '📋', href: 'https://docs.google.com/spreadsheets/d/1C71Ca_-e9SObUGfxE7LhUr6qzlP1g0BO/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true' },
+      { label: 'Pensão', icon: '👨‍👩‍👧‍👦', href: 'https://docs.google.com/spreadsheets/d/1BtLcd1lcpMYpHEQEtT92mbU873JqZJEV/edit?usp=drive_link&ouid=111264718050803700584&rtpof=true&sd=true' }
+    ]
+  }
 };
 
 function selectGrupo(grupo) {
+  const dadosGrupo = links[grupo];
+  const listaControles = document.getElementById('listaControles');
+
+  if (!dadosGrupo || !Array.isArray(dadosGrupo.controles)) return;
+
   document.getElementById('stepGrupo').style.display = 'none';
   document.getElementById('stepControle').style.display = 'block';
-  document.getElementById('labelGrupo').textContent = 'Grupo: ' + (grupo === 'supera' ? 'Supera' : 'Nova Era');
-  document.getElementById('linkFolha').href        = links[grupo].folha;
-  document.getElementById('linkAfastamentos').href = links[grupo].afastamentos;
-  document.getElementById('linkConsignado').href   = links[grupo].consignado;
-  document.getElementById('linkRescisoes').href    = links[grupo].rescisoes;
-  document.getElementById('linkCompensação').href    = links[grupo].compensação;
-  document.getElementById('linkPensões').href    = links[grupo].pensão;
+  document.getElementById('labelGrupo').textContent = 'Grupo: ' + dadosGrupo.nome;
+
+  listaControles.innerHTML = '';
+  dadosGrupo.controles
+    .filter((controle) => controle.href && controle.href !== '#')
+    .forEach((controle) => {
+      const link = document.createElement('a');
+      link.className = 'modal-btn';
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.href = controle.href;
+      link.textContent = `${controle.icon} ${controle.label}`;
+      listaControles.appendChild(link);
+    });
 }
 
 function backToGrupo() {
