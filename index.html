@@ -301,7 +301,7 @@
   <div class="grid">
 
    <!-- App 1 — Controles DP -->
-    <div class="card" onclick="document.getElementById('modalControles').style.display='flex'" style="cursor:pointer;">
+    <div class="card" id="openControlesModal" style="cursor:pointer;">
       <div class="card-preview" style="background: #0d0814;">
         <div class="card-preview-glow" style="background: #c77dff;"></div>
         <div class="card-preview-bg" style="background: radial-gradient(circle at 50% 50%, #c77dff22, transparent 70%);"></div>
@@ -412,7 +412,7 @@
 <div id="modalControles" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.75); align-items:center; justify-content:center; backdrop-filter:blur(6px);">
   <div style="background:#111; border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:2rem; width:90%; max-width:420px; position:relative;">
     
-    <button onclick="closeModal()" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:#888; font-size:20px; cursor:pointer; line-height:1;">✕</button>
+    <button id="closeControlesModal" type="button" style="position:absolute; top:1rem; right:1rem; background:none; border:none; color:#888; font-size:20px; cursor:pointer; line-height:1;">✕</button>
 
     <p style="font-family:'Syne',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#c77dff; margin-bottom:0.5rem;">Controles DP</p>
     <h2 style="font-family:'Syne',sans-serif; font-size:22px; font-weight:800; color:#f0f0f0; margin-bottom:1.75rem;">Selecione o grupo</h2>
@@ -427,7 +427,7 @@
 
     <!-- Step 2: Controles -->
     <div id="stepControle" style="display:none;">
-      <button class="back-btn" onclick="backToGrupo()" title="Voltar">
+      <button class="back-btn" id="backToGrupoBtn" type="button" title="Voltar">
   <div class="back-arrow">
     <svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="#c77dff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="10,3 5,8 10,13"/>
@@ -536,6 +536,13 @@ function closeModal() {
   document.getElementById('modalControles').style.display = 'none';
   backToGrupo();
 }
+
+document.getElementById('openControlesModal').addEventListener('click', function () {
+  document.getElementById('modalControles').style.display = 'flex';
+});
+
+document.getElementById('closeControlesModal').addEventListener('click', closeModal);
+document.getElementById('backToGrupoBtn').addEventListener('click', backToGrupo);
 
 document.getElementById('modalControles').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
