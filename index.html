@@ -322,6 +322,10 @@
   .card:nth-child(5) { animation-delay: 0.98s; }
   .card:nth-child(6) { animation-delay: 1.1s; }
 
+  @media (max-width: 980px) {
+    .card { flex-basis: calc((100% - 20px) / 2); }
+  }
+
   @media (max-width: 600px) {
     .card { flex-basis: min(82vw, 320px); }
     .carousel-viewport { mask-image: none; }
